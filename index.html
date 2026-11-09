@@ -55,8 +55,20 @@ async function github(path,method="GET",body=null){
  const cfg=state.config;
  const url="https://api.github.com/repos/"+cfg.owner+"/"+cfg.repo+"/"+path;
  const res=await fetch(url,{method,headers:{"Accept":"application/vnd.github+json","Authorization":"Bearer "+state.token,"X-GitHub-Api-Version":"2022-11-28",...(body?{"Content-Type":"application/json"}:{})},body:body?JSON.stringify(body):undefined,cache:"no-store"});
- if(!res.ok){let s="";try{s=(await res.json()).message||""}catch(_){}
- throw new Error("GitHub "+res.status+": "+s)}
+ if(!res.ok){
+   let s="";try{s=(await res.json()).message||""}catch(_){}
+   const accepted=res.headers.get("X-Accepted-GitHub-Permissions");
+   const need=path.startsWith("contents/")?"Contents → Read-only":path.includes("/comments")?
+     (method==="POST"?"Issues → Read and write":"Issues → Read-only"):"acesso ao repositório";
+   if((res.status===403||res.status===404)&&/Resource not accessible by personal access token|Not Found/i.test(s)){
+     throw new Error("Acesso recusado em "+path.split("?")[0]+". Verifique se o token foi criado com Resource owner = "+
+       cfg.owner+", Repository access = Only select repositories → "+cfg.repo+
+       " e permissão "+need+"."+(accepted?" GitHub exige: "+accepted+".":"")+
+       " Confira em github.com/settings/personal-access-tokens.");
+   }
+   if(res.status===401)throw new Error("Token inválido, expirado ou revogado. Gere outro em github.com/settings/personal-access-tokens.");
+   throw new Error("GitHub "+res.status+" ("+path.split("?")[0]+"): "+s+(accepted?" Permissões exigidas: "+accepted:""));
+ }
  return res.json();
 }
 async function fileJSON(path){
