@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0b101a">
+<title>D5 Review · Curadoria NeuralFilters</title>
+<style>
+:root{color-scheme:dark;--bg:#0b101a;--panel:#161d2b;--surface:#1d2737;--line:#334157;--light:#f2f5fa;--mute:#a9b7c9;--teal:#79ddc4;--blue:#aabfff;--orange:#fecf95}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--light);font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}button,input,select,textarea{font:inherit}button,select,input,textarea{border:1px solid var(--line);background:var(--surface);color:var(--light);border-radius:11px;padding:10px 12px}button{cursor:pointer;touch-action:manipulation}button:disabled{opacity:.45;cursor:not-allowed}button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+header{border-bottom:1px solid var(--line);background:linear-gradient(135deg,#14283b,#172033 70%);padding:17px max(14px,calc((100% - 1250px)/2));display:flex;justify-content:space-between;gap:14px;align-items:center}
+.brand{font-size:12px;letter-spacing:.16em;font-weight:800;color:var(--teal)}h1{font-size:24px;line-height:1.2;margin:4px 0}h2{font-size:18px;margin:6px 0}p{color:var(--mute);margin:7px 0}.status{font-size:12px;padding:8px 11px;border-radius:30px;background:#243245;color:#c7d7eb;white-space:nowrap}.ok{color:var(--teal)}.warn{color:var(--orange)}.error{color:#ffadad}
+main{max-width:1250px;margin:0 auto;padding:18px 16px 100px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:16px;box-shadow:0 10px 30px #0002}.auth{max-width:640px;margin:32px auto}.auth input{width:100%;margin:12px 0 8px}.auth button{background:#2b5759;font-weight:700}.auth a{color:var(--teal)}.muted{color:var(--mute);font-size:13px}.small{font-size:12px}.topbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:14px}.topbar>div{display:flex;flex-wrap:wrap;gap:9px;align-items:center}.topbar select{max-width:220px}.stats{display:flex;gap:11px;flex-wrap:wrap;align-items:center}.stat{padding:5px 10px;background:#1e2b3b;border-radius:8px;color:#c3d3e5;font-size:12px}.progress{height:7px;background:#273345;border-radius:10px;overflow:hidden;margin:8px 0 16px}.bar{height:100%;width:0;background:linear-gradient(90deg,#39a9ae,#74d4b2);transition:width .2s}
+.meta{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}.case-id{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:14px;color:#d5dff5}.chip{display:inline-block;border:1px solid #48546a;border-radius:99px;padding:4px 9px;font-size:11px;color:#ccdaea;margin:2px}.gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:14px 0}.tile{min-width:0;background:#131c29;border:1px solid var(--line);border-radius:14px;padding:10px;cursor:pointer;transition:border-color .15s}.tile:hover{border-color:#72bfb6}.tile strong{display:block;margin-bottom:7px;color:#c7d5eb;font-size:13px}.tile canvas{display:block;width:100%;aspect-ratio:1;background:#243347;border-radius:9px}.tile.active{border-color:var(--teal)}.tile small{display:block;text-align:center;color:var(--mute);margin-top:4px}
+.review-row{display:flex;flex-wrap:wrap;gap:9px;align-items:center}.reason{width:210px}.notes{flex:1;min-width:170px}.actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:14px}.actions button{font-weight:760;padding:15px 8px;font-size:16px;border-radius:13px}.reject{background:#5a303b;border-color:#8b4958;color:#ffe4e8}.approve{background:#214c45;border-color:#397e67;color:#d4ffee}.later{background:#253247}.nav{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:15px}.nav button{padding:9px 16px}.message{min-height:22px;color:var(--mute);font-size:13px;margin-top:7px}
+dialog{background:#101b29;color:var(--light);border:1px solid var(--line);border-radius:15px;width:min(96vw,760px);padding:10px}dialog::backdrop{background:#000c}dialog canvas{width:100%;max-height:75vh;object-fit:contain}dialog .dtop{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.help{margin-top:16px;color:var(--mute);font-size:12px}kbd{border:1px solid var(--line);border-radius:5px;padding:1px 5px;background:#243249}
+@media(max-width:650px){header{padding:13px 14px}h1{font-size:21px}.status{max-width:44vw;overflow:hidden;text-overflow:ellipsis}main{padding:11px 10px 145px}.panel{padding:11px;border-radius:13px}.topbar{gap:8px}.topbar select{max-width:150px}.gallery{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}.tile{padding:4px;border-radius:9px}.tile strong{font-size:10px;min-height:18px;margin:4px}.tile canvas{border-radius:5px}.tile small{display:none}.review-row{display:grid;grid-template-columns:1fr 1fr}.reason{width:100%}.notes{grid-column:1 / -1;width:100%}.actions{position:fixed;bottom:0;left:0;right:0;z-index:10;margin:0;padding:11px 12px calc(11px + env(safe-area-inset-bottom));background:#101b28ee;backdrop-filter:blur(12px);border-top:1px solid var(--line)}.actions button{font-size:15px;padding:14px 2px}.nav{margin-bottom:4px}.help{display:none}}
+</style></head>
+<body>
+<header><div><div class="brand">NEURALFILTERS · D5 CURATION</div><h1>Escolha os melhores targets</h1></div><span id="connection" class="status">Não conectado</span></header>
+<main>
+<section id="auth" class="panel auth">
+<h2>Conectar à coleção privada</h2><p>As fotografias não são públicas. A interface usa um token pessoal do GitHub exclusivamente para ler as prévias e registrar seus votos no repositório privado.</p>
+<label for="token">Token GitHub (fine-grained)</label><input id="token" type="password" autocomplete="off" spellcheck="false" placeholder="github_pat_…">
+<button id="connect">Entrar e abrir curadoria</button><p id="loginmsg" class="small error" role="status"></p>
+<p class="muted">Permissões necessárias, restritas ao repositório <b>APS-D5-Curation-Data</b>: <b>Contents: Read</b> e <b>Issues: Read and write</b>. <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer">Criar token no GitHub</a>.</p>
+<p class="muted">O token permanece apenas na sessão deste navegador e não é enviado ao site público. Pode ser necessário digitá-lo novamente se o aplicativo fechar.</p>
+</section>
+<section id="workspace" hidden>
+<div class="topbar">
+ <div><label for="batch">Lote</label><select id="batch"></select><select id="filter"><option value="pending">Ainda não avaliadas</option><option value="all">Todas as imagens</option><option value="approved">Aprovadas</option><option value="rejected">Rejeitadas</option><option value="later">Revisar depois</option><option value="needs_repair">Correção pendente</option></select></div>
+ <div class="stats"><span id="counts" class="stat">Carregando…</span><button id="refresh" title="Atualizar lote e votos">Atualizar</button><button id="logout" title="Encerrar sessão">Sair</button></div>
+</div>
+<div class="progress"><div id="bar" class="bar"></div></div>
+<section class="panel">
+ <div class="meta"><div><div id="caseid" class="case-id">—</div><div id="caseinfo" class="muted">—</div></div><div id="tags"></div></div>
+ <div class="gallery">
+  <div class="tile" data-i="0" title="Ampliar fotografia original"><strong>01 · Original</strong><canvas id="c0" width="384" height="384"></canvas><small>Fotografia de origem</small></div>
+  <div class="tile" data-i="1" title="Ampliar teacher bruto"><strong>02 · Teacher bruto</strong><canvas id="c1" width="384" height="384"></canvas><small>Sem pós-processamento</small></div>
+  <div class="tile" data-i="2" title="Ampliar target final"><strong>03 · Corrigida APS99</strong><canvas id="c2" width="384" height="384"></canvas><small>APS97 condicional + V13</small></div>
+ </div>
+ <div class="review-row"><label for="reason" class="small">Motivo da rejeição</label><select class="reason" id="reason"><option value="">Não especificado</option><option value="mouth">Boca / batom / dentes</option><option value="eyes">Olhos / delineado</option><option value="glasses">Óculos</option><option value="skin">Pele / testa / cor</option><option value="identity">Identidade / anatomia</option><option value="background">Fundo / cabelo / artefato</option><option value="other">Outro</option></select><input id="note" class="notes" placeholder="Observações opcionais…" maxlength="500"></div>
+ <div class="actions"><button class="reject" id="reject">✕ Rejeitar</button><button class="later" id="later">↷ Depois</button><button class="approve" id="approve">✓ Aprovar</button></div>
+ <div class="nav"><button id="prev">← Anterior</button><span id="position" class="muted">—</span><button id="next">Próxima →</button></div>
+ <div class="message" id="message" role="status"></div>
+</section>
+<p class="help">Atalhos: <kbd>A</kbd> aprovar · <kbd>R</kbd> rejeitar · <kbd>S</kbd> revisar depois · <kbd>←</kbd>/<kbd>→</kbd> navegar. Cada voto é registrado no GitHub e sincronizado com o arquivo local no computador pelo agente APS102.</p>
+</section>
+</main>
+<dialog id="zoom"><div class="dtop"><strong id="zoomtitle">Prévia</strong><button id="closezoom">Fechar</button></div><canvas id="cz" width="768" height="768"></canvas></dialog>
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+const state={token:sessionStorage.getItem("d5token")||"", config:null, batch:"batch_000", rows:[], allRows:[], votes:{},index:0, busy:false,blobUrl:null,image:null};
+function msg(t,error=false){$("message").textContent=t;$("message").className="message "+(error?"error":"")}
+function loginmsg(t){$("loginmsg").textContent=t}
+async function github(path,method="GET",body=null){
+ const cfg=state.config;
+ const url="https://api.github.com/repos/"+cfg.owner+"/"+cfg.repo+"/"+path;
+ const res=await fetch(url,{method,headers:{"Accept":"application/vnd.github+json","Authorization":"Bearer "+state.token,"X-GitHub-Api-Version":"2022-11-28",...(body?{"Content-Type":"application/json"}:{})},body:body?JSON.stringify(body):undefined,cache:"no-store"});
+ if(!res.ok){let s="";try{s=(await res.json()).message||""}catch(_){}
+ throw new Error("GitHub "+res.status+": "+s)}
+ return res.json();
+}
+async function fileJSON(path){
+ const obj=await github("contents/"+path+"?ref=main");
+ if(obj.content){return JSON.parse(decodeURIComponent(escape(atob(obj.content.replace(/\s/g,"")))))}
+ // Files above 1MB have no inline content; manifests must remain small.
+ throw new Error("Manifesto grande demais ou inacessível: "+path);
+}
+function setLogged(yes){
+ $("auth").hidden=yes;$("workspace").hidden=!yes;
+ $("connection").textContent=yes?"Conectado · repositório privado":"Não conectado";
+ $("connection").className="status"+(yes?" ok":"");
+}
+async function connect(){
+ const t=$("token").value.trim()||state.token;
+ if(!t){loginmsg("Informe um token do GitHub.");return}
+ state.token=t;
+ $("connect").disabled=true;loginmsg("Conferindo permissões…");
+ try{
+   const cfg=await (await fetch("config.json",{cache:"no-store"})).json();
+   if(!cfg.owner||!cfg.repo)throw Error("Configuração pública ausente");
+   state.config=cfg;
+   await fileJSON("config.json");
+   sessionStorage.setItem("d5token",t);
+   setLogged(true);loginmsg("");
+   $("batch").innerHTML="";
+   for(let n=0;n<cfg.batch_count;n++){
+     const b="batch_"+String(n).padStart(3,"0");
+     $("batch").add(new Option(b+" · "+(n*500+1)+"–"+((n+1)*500),b));
+   }
+   const last=localStorage.getItem("d5lastbatch");
+   if(last&&cfg.issues[last])state.batch=last;
+   $("batch").value=state.batch;
+   await loadBatch();
+ }catch(e){loginmsg(e.message||String(e));setLogged(false)}
+ finally{$("connect").disabled=false}
+}
+function parseVoteComment(c){
+ if(c.user?.login?.toLowerCase()!=="kosmosapien"||typeof c.body!=="string"||!c.body.startsWith("D5CUR1 "))return null;
+ try{const o=JSON.parse(c.body.slice(7));if(!o.id||!["approve","reject","later","clear"].includes(o.vote))return null;return o}catch(_){return null}
+}
+async function loadVotes(){
+ const issue=state.config.issues[state.batch];
+ const result={};
+ for(let page=1;page<=30;page++){
+   const list=await github("issues/"+issue+"/comments?per_page=100&page="+page);
+   for(const item of list){const v=parseVoteComment(item);if(v&&v.batch===state.batch)result[v.id]=v}
+   if(list.length<100)break;
+ }
+ return result;
+}
+async function loadBatch(){
+ const requested=state.batch;
+ $("batch").disabled=true;
+ msg("Carregando lote privado e votos registrados…");
+ try{
+    const [manifest,votes]=await Promise.all([fileJSON("manifests/"+requested+".json"),loadVotes()]);
+    if(requested!==state.batch)return;
+    state.votes=votes;
+    state.allRows=manifest.cases||[];
+    state.index=0;
+    makeRows();
+    msg("Lote carregado. Decisões anteriores recuperadas do GitHub.");
+ }catch(e){msg(e.message,true)}
+ finally{$("batch").disabled=false}
+}
+function makeRows(rememberId=null){
+ const fl=$("filter").value;
+ state.rows=state.allRows.filter(c=>{
+   const v=state.votes[c.id]?.vote;
+   if(fl==="all")return true;
+   if(fl==="pending")return !v||v==="clear";
+   if(fl==="approved")return v==="approve";
+   if(fl==="rejected")return v==="reject";
+   if(fl==="later")return v==="later";
+   return c.status!=="ready";
+ });
+ state.index=Math.max(0,state.rows.findIndex(c=>c.id===rememberId));
+ render();
+}
+function emptyCanvas(id){
+ const c=$(id),ctx=c.getContext("2d");ctx.fillStyle="#203246";ctx.fillRect(0,0,c.width,c.height);ctx.fillStyle="#b1c4d3";ctx.fillText("Sem imagem",20,35);
+}
+async function getTriptych(c){
+ const path="previews/"+state.batch+"/"+c.id+".webp";
+ const obj=await github("contents/"+path+"?ref=main");
+ if(!obj.content)throw Error("Prévia inacessível: "+c.id);
+ const bytes=Uint8Array.from(atob(obj.content.replace(/\s/g,"")),x=>x.charCodeAt(0));
+ return URL.createObjectURL(new Blob([bytes],{type:"image/webp"}));
+}
+function drawTile(ctx,img,index,w=384){
+ const d=img.naturalWidth/3;
+ ctx.clearRect(0,0,w,w);
+ ctx.drawImage(img,index*d,0,d,img.naturalHeight,0,0,w,w);
+}
+async function render(){
+ const c=state.rows[state.index],serial=state.index;
+ const approved=Object.values(state.votes).filter(x=>x.vote==="approve").length;
+ const rejected=Object.values(state.votes).filter(x=>x.vote==="reject").length;
+ const later=Object.values(state.votes).filter(x=>x.vote==="later").length;
+ $("counts").textContent="✓ "+approved+" · ✕ "+rejected+" · depois "+later+" / "+state.allRows.length;
+ $("bar").style.width=(state.allRows.length?100*(approved+rejected)/state.allRows.length:0)+"%";
+ $("position").textContent=state.rows.length?(serial+1)+" / "+state.rows.length:"Nenhum item neste filtro";
+ for(let i=0;i<3;i++)emptyCanvas("c"+i);
+ if(!c){
+   $("caseid").textContent="Nenhuma imagem disponível neste filtro";
+   $("caseinfo").textContent="Selecione outro filtro ou lote.";
+   $("tags").textContent="";$("approve").disabled=true;$("reject").disabled=true;$("later").disabled=true;
+   return;
+ }
+ $("caseid").textContent=c.id;
+ $("caseinfo").textContent=c.domain+" · "+c.screening+" · "+c.status;
+ $("tags").textContent="";
+ for(const val of (c.flags||[]).slice(0,3)){
+   const tag=document.createElement("span");tag.className="chip";tag.textContent=val;$("tags").append(tag);
+ }
+ const old=state.votes[c.id];
+ $("reason").value=old?.reason||"";
+ $("note").value=old?.note||"";
+ $("approve").disabled=state.busy||c.status!=="ready";
+ $("reject").disabled=state.busy;$("later").disabled=state.busy;
+ const current=c.id,sourceBatch=state.batch;
+ try{
+   const url=await getTriptych(c);
+   const image=new Image();
+   await new Promise((resolve,reject)=>{image.onload=resolve;image.onerror=reject;image.src=url});
+   if(state.blobUrl)URL.revokeObjectURL(state.blobUrl);
+   state.blobUrl=url;
+   if(state.rows[state.index]?.id!==current||state.batch!==sourceBatch){URL.revokeObjectURL(url);return}
+   state.image=image;
+   for(let i=0;i<3;i++)drawTile($("c"+i).getContext("2d"),image,i);
+ }catch(e){if(state.rows[state.index]?.id===current)msg("Erro ao carregar imagem: "+e.message,true)}
+}
+async function vote(v){
+ if(state.busy)return;
+ const c=state.rows[state.index];
+ if(!c)return;
+ if(v==="approve"&&c.status!=="ready"){msg("Target indisponível: não é possível aprovar.",true);return}
+ state.busy=true;$("approve").disabled=true;$("reject").disabled=true;$("later").disabled=true;
+ const event={id:c.id,batch:state.batch,vote:v,reason:v==="reject"?$("reason").value:"",
+              note:$("note").value.trim(),target_sha:c.target_sha||null,
+              client_at:new Date().toISOString(),
+              event_id:(crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random())};
+ try{
+   await github("issues/"+state.config.issues[state.batch]+"/comments","POST",{body:"D5CUR1 "+JSON.stringify(event)});
+   state.votes[c.id]=event;
+   localStorage.setItem("d5lastbatch",state.batch);
+   msg("Decisão salva no GitHub. Sincronização com o computador em andamento.");
+   if($("filter").value==="pending")makeRows(); else{render();nextCase(1)}
+ }catch(e){msg("Falha ao salvar; a decisão NÃO foi registrada: "+e.message,true)}
+ finally{state.busy=false;render()}
+}
+function nextCase(step){
+ if(!state.rows.length)return;
+ const n=state.index+step;
+ if(n>=0&&n<state.rows.length){state.index=n;render()}
+ else if(n>=state.rows.length&&state.batch!=="batch_019"){
+   const next=Number(state.batch.split("_")[1])+1;
+   state.batch="batch_"+String(next).padStart(3,"0");
+   $("batch").value=state.batch;localStorage.setItem("d5lastbatch",state.batch);loadBatch();
+ } else if(n<0&&state.batch!=="batch_000"){
+   const prev=Number(state.batch.split("_")[1])-1;
+   state.batch="batch_"+String(prev).padStart(3,"0");
+   $("batch").value=state.batch;loadBatch();
+ }
+}
+async function zoom(i){
+ if(!state.image)return;
+ const c=$("cz");drawTile(c.getContext("2d"),state.image,i,768);
+ $("zoomtitle").textContent=["Original","Teacher bruto","Target corrigido"][i]+" · "+(state.rows[state.index]?.id||"");
+ $("zoom").showModal();
+}
+$("connect").onclick=connect;
+$("token").onkeydown=e=>{if(e.key==="Enter")connect()};
+$("logout").onclick=()=>{sessionStorage.removeItem("d5token");state.token="";setLogged(false);$("token").value=""};
+$("batch").onchange=()=>{state.batch=$("batch").value;localStorage.setItem("d5lastbatch",state.batch);loadBatch()};
+$("filter").onchange=()=>makeRows();
+$("refresh").onclick=loadBatch;
+$("approve").onclick=()=>vote("approve");
+$("reject").onclick=()=>vote("reject");
+$("later").onclick=()=>vote("later");
+$("prev").onclick=()=>nextCase(-1);$("next").onclick=()=>nextCase(1);
+document.querySelectorAll(".tile").forEach(el=>el.onclick=()=>zoom(Number(el.dataset.i)));
+$("closezoom").onclick=()=>$("zoom").close();
+document.onkeydown=e=>{
+ if(!$("workspace").hidden&&e.target.tagName!=="INPUT"&&e.target.tagName!=="TEXTAREA"&&e.target.tagName!=="SELECT"&&!$("zoom").open){
+   const k=e.key.toLowerCase();
+   if(k==="a")vote("approve");else if(k==="r")vote("reject");else if(k==="s")vote("later");
+   else if(k==="arrowleft")nextCase(-1);else if(k==="arrowright")nextCase(1);
+ }
+};
+if(state.token){$("token").value=state.token;connect()}
+</script></body></html>

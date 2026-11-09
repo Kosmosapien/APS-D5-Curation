@@ -1,0 +1,29 @@
+{
+  "owner": "Kosmosapien",
+  "repo": "APS-D5-Curation-Data",
+  "issues": {
+    "batch_000": 1,
+    "batch_001": 2,
+    "batch_002": 3,
+    "batch_003": 4,
+    "batch_004": 5,
+    "batch_005": 6,
+    "batch_006": 7,
+    "batch_007": 8,
+    "batch_008": 9,
+    "batch_009": 10,
+    "batch_010": 11,
+    "batch_011": 12,
+    "batch_012": 13,
+    "batch_013": 14,
+    "batch_014": 15,
+    "batch_015": 16,
+    "batch_016": 17,
+    "batch_017": 18,
+    "batch_018": 19,
+    "batch_019": 20
+  },
+  "batch_count": 20,
+  "schema": "D5CUR1",
+  "version": 1
+}
