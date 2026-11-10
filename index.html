@@ -12,16 +12,41 @@ main{max-width:1250px;margin:0 auto;padding:18px 16px 100px}.panel{background:va
 dialog{background:#101b29;color:var(--light);border:1px solid var(--line);border-radius:15px;width:min(96vw,760px);padding:10px}dialog::backdrop{background:#000c}dialog canvas{width:100%;max-height:75vh;object-fit:contain}dialog .dtop{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
 .help{margin-top:16px;color:var(--mute);font-size:12px}kbd{border:1px solid var(--line);border-radius:5px;padding:1px 5px;background:#243249}
 @media(max-width:650px){header{padding:13px 14px}h1{font-size:21px}.status{max-width:44vw;overflow:hidden;text-overflow:ellipsis}main{padding:11px 10px 145px}.panel{padding:11px;border-radius:13px}.topbar{gap:8px}.topbar select{max-width:150px}.gallery{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}.tile{padding:4px;border-radius:9px}.tile strong{font-size:10px;min-height:18px;margin:4px}.tile canvas{border-radius:5px}.tile small{display:none}.review-row{display:grid;grid-template-columns:1fr 1fr}.reason{width:100%}.notes{grid-column:1 / -1;width:100%}.actions{position:fixed;bottom:0;left:0;right:0;z-index:10;margin:0;padding:11px 12px calc(11px + env(safe-area-inset-bottom));background:#101b28ee;backdrop-filter:blur(12px);border-top:1px solid var(--line)}.actions button{font-size:15px;padding:14px 2px}.nav{margin-bottom:4px}.help{display:none}}
+
+/* D5MOBILEV2 */
+.auth-guide{padding:12px;border:1px solid #5c7083;border-radius:12px;background:#17293a;margin-top:12px}
+.auth-guide summary{cursor:pointer;color:var(--teal);font-weight:720}.auth-guide ol{padding-left:18px;font-size:13px;color:#bfd0e0}
+.auth-guide li{margin:9px 0}.auth-guide code{color:#b7efdd}.login-note{font-size:13px;color:#dce6f3}
+.variants{margin:12px 0 15px;background:#142c38;border:1px solid #386879;border-radius:12px;padding:12px}
+.variants .toolbar{display:flex;gap:9px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin:8px 0}
+.variant-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.variant-tile{min-width:0;background:#12212d;border:1px solid #3d5a70;border-radius:9px;padding:5px;cursor:zoom-in}
+.variant-tile canvas{width:100%;aspect-ratio:1;background:#273c51;border-radius:6px}
+.variant-tile span{font-size:12px;display:block;color:#cee2eb}
+#variantToggle{margin:6px 0 10px;width:100%;background:#254a50;color:#cef9eb;border-color:#49796f}
+#variantHelp{margin:8px 0;color:#c8d2d6;font-size:12px}
+#variantNote{background:#2b4950}
+@media(max-width:650px){.variant-grid{grid-template-columns:repeat(5,minmax(100px,1fr));overflow-x:auto;padding-bottom:9px}.variant-tile span{font-size:11px}.auth-guide{padding:9px}}
 </style></head>
 <body>
-<header><div><div class="brand">NEURALFILTERS · D5 CURATION</div><h1>Escolha os melhores targets</h1></div><span id="connection" class="status">Não conectado</span></header>
+<header><div><div class="brand">NEURALFILTERS · D5 CURATION</div><h1>Curadoria D5 · celular</h1></div><span id="connection" class="status">Não conectado</span></header>
 <main>
 <section id="auth" class="panel auth">
 <h2>Conectar à coleção privada</h2><p>As fotografias não são públicas. A interface usa um token pessoal do GitHub exclusivamente para ler as prévias e registrar seus votos no repositório privado.</p>
-<label for="token">Token GitHub (fine-grained)</label><input id="token" type="password" autocomplete="off" spellcheck="false" placeholder="github_pat_…">
+<label for="token">Token GitHub pessoal (fine-grained)</label><input id="token" type="password" autocomplete="off" spellcheck="false" placeholder="github_pat_…">
 <button id="connect">Entrar e abrir curadoria</button><p id="loginmsg" class="small error" role="status"></p>
 <p class="muted">Permissões necessárias, restritas ao repositório <b>APS-D5-Curation-Data</b>: <b>Contents: Read</b> e <b>Issues: Read and write</b>. <a href="https://github.com/settings/personal-access-tokens/new?name=D5-Curadoria&amp;target_name=Kosmosapien&amp;expires_in=30&amp;contents=read&amp;issues=write" target="_blank" rel="noopener noreferrer">Criar token com permissões preenchidas</a>.</p>
 <p class="muted">O token permanece apenas na sessão deste navegador e não é enviado ao site público. Pode ser necessário digitá-lo novamente se o aplicativo fechar.</p>
+<details class="auth-guide" open><summary>Como corrigir o erro 403 e entrar pelo celular</summary>
+<ol>
+<li>Abra o link <b>Criar token</b> acima e entre na conta GitHub que tem acesso a <code>Kosmosapien/APS-D5-Curation-Data</code>.</li>
+<li>Em <b>Resource owner</b>, selecione <b>Kosmosapien</b>. Em <b>Repository access</b>, escolha <b>Only select repositories</b> e marque exclusivamente <code>APS-D5-Curation-Data</code>.</li>
+<li>Em <b>Repository permissions</b>, selecione <b>Contents: Read-only</b> e <b>Issues: Read and write</b>. Salve e copie o token gerado.</li>
+<li>Volte a esta página, cole o token e pressione <b>Entrar e abrir curadoria</b>. O token não deve ser enviado por mensagem ou colocado em links.</li>
+</ol>
+<p class="login-note">Se o repositório privado não aparecer para seleção, confira se a conta GitHub é a proprietária ou tem acesso. Uma conta conectada ao GitHub no navegador não autoriza automaticamente esta aplicação.</p>
+</details>
+
 </section>
 <section id="workspace" hidden>
 <div class="topbar">
@@ -36,7 +61,17 @@ dialog{background:#101b29;color:var(--light);border:1px solid var(--line);border
   <div class="tile" data-i="1" title="Ampliar teacher bruto"><strong>02 · Teacher bruto</strong><canvas id="c1" width="384" height="384"></canvas><small>Sem pós-processamento</small></div>
   <div class="tile" data-i="2" title="Ampliar target final"><strong>03 · Corrigida APS99</strong><canvas id="c2" width="384" height="384"></canvas><small>APS97 condicional + V13</small></div>
  </div>
- <div class="review-row"><label for="reason" class="small">Motivo da rejeição</label><select class="reason" id="reason"><option value="">Não especificado</option><option value="mouth">Boca / batom / dentes</option><option value="eyes">Olhos / delineado</option><option value="glasses">Óculos</option><option value="skin">Pele / testa / cor</option><option value="identity">Identidade / anatomia</option><option value="background">Fundo / cabelo / artefato</option><option value="other">Outro</option></select><input id="note" class="notes" placeholder="Observações opcionais…" maxlength="500"></div>
+ 
+<button id="variantToggle" type="button" hidden>Comparar correções experimentais deste caso</button>
+<section id="variantPanel" class="variants" hidden>
+ <strong>Comparações experimentais · não aprovadas</strong>
+ <p class="muted">Estas opções não substituem o target APS99. Os votos principais continuam avaliando exclusivamente a terceira imagem acima.</p>
+ <div class="toolbar"><label for="variantCategory">Correção:</label><select id="variantCategory"></select><button id="variantNote" type="button">Adicionar preferência à observação</button></div>
+ <div id="variantGrid" class="variant-grid"></div>
+ <select id="variantChoice"><option value="">Escolher variante preferida para anotar…</option></select>
+ <p id="variantHelp">Toque numa imagem para ampliar; a preferência só será registrada quando você salvar o voto principal.</p>
+</section>
+<div class="review-row"><label for="reason" class="small">Motivo da rejeição</label><select class="reason" id="reason"><option value="">Não especificado</option><option value="mouth">Boca / batom / dentes</option><option value="eyes">Olhos / delineado</option><option value="iris_outside">Íris fora da pálpebra</option><option value="iris_pasted">Íris colada / artificial</option><option value="glasses">Óculos</option><option value="skin">Pele / testa / cor</option><option value="identity">Identidade / anatomia</option><option value="background">Fundo / cabelo / artefato</option><option value="other">Outro</option></select><input id="note" class="notes" placeholder="Descreva o defeito e em qual etapa aparece…" maxlength="500"></div>
  <div class="actions"><button class="reject" id="reject">✕ Rejeitar</button><button class="later" id="later">↷ Depois</button><button class="approve" id="approve">✓ Aprovar</button></div>
  <div class="nav"><button id="prev">← Anterior</button><span id="position" class="muted">—</span><button id="next">Próxima →</button></div>
  <div class="message" id="message" role="status"></div>
@@ -48,7 +83,8 @@ dialog{background:#101b29;color:var(--light);border:1px solid var(--line);border
 <script>
 "use strict";
 const $=id=>document.getElementById(id);
-const state={token:sessionStorage.getItem("d5token")||"", config:null, batch:"batch_000", rows:[], allRows:[], votes:{},index:0, busy:false,blobUrl:null,image:null};
+const state={token:sessionStorage.getItem("d5token")||"", config:null, batch:"batch_000", rows:[], allRows:[], votes:{},index:0, busy:false,blobUrl:null,image:null,
+variants:null, variantURL:null, variantImage:null, variantCategory:"", variantCase:"", variantOpen:false};
 function msg(t,error=false){$("message").textContent=t;$("message").className="message "+(error?"error":"")}
 function loginmsg(t){$("loginmsg").textContent=t}
 async function github(path,method="GET",body=null){
@@ -61,7 +97,7 @@ async function github(path,method="GET",body=null){
    const need=path.startsWith("contents/")?"Contents → Read-only":path.includes("/comments")?
      (method==="POST"?"Issues → Read and write":"Issues → Read-only"):"acesso ao repositório";
    if((res.status===403||res.status===404)&&/Resource not accessible by personal access token|Not Found/i.test(s)){
-     throw new Error("Acesso recusado em "+path.split("?")[0]+". Verifique se o token foi criado com Resource owner = "+
+     throw new Error("GitHub "+res.status+" em "+path.split("?")[0]+". Token sem acesso. Verifique Resource owner = "+
        cfg.owner+", Repository access = Only select repositories → "+cfg.repo+
        " e permissão "+need+"."+(accepted?" GitHub exige: "+accepted+".":"")+
        " Confira em github.com/settings/personal-access-tokens.");
@@ -92,6 +128,10 @@ async function connect(){
    if(!cfg.owner||!cfg.repo)throw Error("Configuração pública ausente");
    state.config=cfg;
    await fileJSON("config.json");
+   // A valid Contents token alone is not enough: voting requires Issues access.
+   await github("issues/1/comments?per_page=1");
+   try{state.variants=await fileJSON("variants/manifest.json")}catch(e){state.variants=null;console.warn("Optional private research variants unavailable",String(e))}
+
    sessionStorage.setItem("d5token",t);
    setLogged(true);loginmsg("");
    $("batch").innerHTML="";
@@ -174,12 +214,14 @@ async function render(){
  $("position").textContent=state.rows.length?(serial+1)+" / "+state.rows.length:"Nenhum item neste filtro";
  for(let i=0;i<3;i++)emptyCanvas("c"+i);
  if(!c){
+   $("variantToggle").hidden=true;resetVariant();
    $("caseid").textContent="Nenhuma imagem disponível neste filtro";
    $("caseinfo").textContent="Selecione outro filtro ou lote.";
    $("tags").textContent="";$("approve").disabled=true;$("reject").disabled=true;$("later").disabled=true;
    return;
  }
  $("caseid").textContent=c.id;
+ updateVariantLink(c.id);
  $("caseinfo").textContent=c.domain+" · "+c.screening+" · "+c.status;
  $("tags").textContent="";
  for(const val of (c.flags||[]).slice(0,3)){
@@ -202,6 +244,73 @@ async function render(){
    for(let i=0;i<3;i++)drawTile($("c"+i).getContext("2d"),image,i);
  }catch(e){if(state.rows[state.index]?.id===current)msg("Erro ao carregar imagem: "+e.message,true)}
 }
+
+function variantCategories(id){
+ if(!state.variants?.categories)return [];
+ return Object.entries(state.variants.categories).filter(([cat,obj])=>Array.isArray(obj.ids)&&obj.ids.includes(id));
+}
+function resetVariant(){
+ if(state.variantURL){URL.revokeObjectURL(state.variantURL);state.variantURL=null}
+ state.variantImage=null;state.variantCase="";
+ $("variantGrid").replaceChildren();$("variantPanel").hidden=true;
+}
+function updateVariantLink(id){
+ const available=variantCategories(id);
+ $("variantToggle").hidden=!available.length;
+ $("variantToggle").textContent=available.length?("Comparar "+available.length+" teste(s) de correção deste caso"):"";
+ if(!available.length){state.variantOpen=false;resetVariant();return}
+ if(state.variantOpen){$("variantPanel").hidden=false;updateVariantCategories(id,available)}
+ else $("variantPanel").hidden=true;
+}
+function updateVariantCategories(id,available=variantCategories(id)){
+ const sel=$("variantCategory");sel.replaceChildren();
+ const titles={iris:"Íris",glasses:"Óculos e delineado",mouth:"Boca e batom",skin:"Pele"};
+ available.forEach(([name])=>sel.add(new Option(titles[name]||name,name)));
+ if(!available.some(([n])=>n===state.variantCategory))state.variantCategory=available[0][0];
+ sel.value=state.variantCategory;
+ loadVariant(id,state.variantCategory);
+}
+async function loadVariant(id,category){
+ $("variantGrid").replaceChildren();
+ $("variantHelp").textContent="Carregando comparação privada…";
+ state.variantCase=id;state.variantCategory=category;
+ const config=state.variants?.categories?.[category];
+ if(!config){$("variantHelp").textContent="Variante indisponível";return}
+ try{
+  const file="variants/"+category+"/"+id+".webp";
+  const obj=await github("contents/"+file+"?ref=main");
+  if(!obj.content)throw new Error("Imagem ausente na coleção privada");
+  const raw=Uint8Array.from(atob(obj.content.replace(/\s/g,"")),c=>c.charCodeAt(0));
+  const url=URL.createObjectURL(new Blob([raw],{type:"image/webp"}));
+  const im=new Image();
+  await new Promise((ok,fail)=>{im.onload=ok;im.onerror=fail;im.src=url});
+  if(state.rows[state.index]?.id!==id||!state.variantOpen||state.variantCategory!==category){
+   URL.revokeObjectURL(url);return
+  }
+  if(state.variantURL)URL.revokeObjectURL(state.variantURL);
+  state.variantURL=url;state.variantImage=im;
+  const grid=$("variantGrid");const choice=$("variantChoice");choice.replaceChildren();
+  config.labels.forEach((lab,i)=>{
+   const box=document.createElement("div");box.className="variant-tile";
+   const canvas=document.createElement("canvas");canvas.width=240;canvas.height=240;
+   canvas.getContext("2d").drawImage(im,i*(im.naturalWidth/config.labels.length),0,
+     im.naturalWidth/config.labels.length,im.naturalHeight,0,0,240,240);
+   const cap=document.createElement("span");cap.textContent=lab;box.append(canvas,cap);
+   box.onclick=()=>{
+     const c=$("cz");c.getContext("2d").clearRect(0,0,c.width,c.height);
+     c.getContext("2d").drawImage(im,i*(im.naturalWidth/config.labels.length),0,
+       im.naturalWidth/config.labels.length,im.naturalHeight,0,0,c.width,c.height);
+     $("zoomtitle").textContent=lab+" · "+id;
+     $("zoom").showModal()
+   };
+   grid.appendChild(box);
+   choice.add(new Option(lab,String(i)));
+  });
+  choice.value="2"; // Current APS99 is comparator by default
+  $("variantHelp").textContent="São propostas de pesquisa, não targets aprovados. Anote sua preferência e depois salve o voto.";
+ }catch(e){$("variantHelp").textContent="Não foi possível carregar a comparação: "+(e.message||e)}
+}
+
 async function vote(v){
  if(state.busy)return;
  const c=state.rows[state.index];
@@ -241,7 +350,29 @@ async function zoom(i){
  $("zoomtitle").textContent=["Original","Teacher bruto","Target corrigido"][i]+" · "+(state.rows[state.index]?.id||"");
  $("zoom").showModal();
 }
+
+$("variantToggle").onclick=()=>{
+ state.variantOpen=!state.variantOpen;
+ $("variantPanel").hidden=!state.variantOpen;
+ if(state.variantOpen)updateVariantCategories(state.rows[state.index]?.id||"");
+};
+$("variantCategory").onchange=()=>{
+ state.variantCategory=$("variantCategory").value;
+ loadVariant(state.rows[state.index]?.id||"",state.variantCategory);
+};
+$("variantNote").onclick=()=>{
+ const id=state.rows[state.index]?.id||"";
+ const cat=state.variantCategory;
+ const labels=state.variants?.categories?.[cat]?.labels||[];
+ const n=Number($("variantChoice").value);
+ if(!id||!labels[n])return;
+ const add="[APS teste "+cat+": "+labels[n]+" preferida]";
+ const current=$("note").value.trim();
+ $("note").value=(current+" "+add).trim().slice(0,500);
+ $("variantHelp").textContent="Preferência adicionada à observação. Salve uma decisão para registrá-la no GitHub.";
+};
 $("connect").onclick=connect;
+
 $("token").onkeydown=e=>{if(e.key==="Enter")connect()};
 $("logout").onclick=()=>{sessionStorage.removeItem("d5token");state.token="";setLogged(false);$("token").value=""};
 $("batch").onchange=()=>{state.batch=$("batch").value;localStorage.setItem("d5lastbatch",state.batch);loadBatch()};
