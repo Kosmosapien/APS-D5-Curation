@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101924">
+<title>Validação de correções D5 · Mini v1</title>
+<style>
+:root{color-scheme:dark;--bg:#0d141e;--panel:#172332;--line:#405269;--txt:#e8f1f5;--muted:#b6c4d0;--sea:#86dfc3;--bad:#efadb8}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font:14px/1.52 system-ui,-apple-system,Segoe UI,sans-serif}
+header{padding:16px max(15px,calc((100% - 1400px)/2));background:linear-gradient(110deg,#163342,#172438);border-bottom:1px solid #456173}
+header h1{font-size:23px;line-height:1.18;margin:5px 0}
+header p{color:var(--muted);max-width:1050px;margin:5px 0}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px}.status{font-size:12px;color:var(--sea);padding:4px 9px;border:1px solid #4b806d;border-radius:20px}
+main{max-width:1400px;margin:auto;padding:14px 12px 100px}
+section.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
+button,input,select,textarea{font:inherit;color:var(--txt);background:#253448;border:1px solid #4a5d74;border-radius:9px;padding:11px}
+button{cursor:pointer;touch-action:manipulation}button:disabled{opacity:.43;cursor:not-allowed}
+input,textarea{width:100%}label{display:block;font-size:12px;color:#c4d5df;margin:5px 0}
+.auth{max-width:650px;margin:25px auto}.auth a,a{color:var(--sea)}.muted{color:var(--muted)}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.toolbar label{display:inline}.toolbar select{max-width:200px}.info{margin-left:auto}
+.progress{height:6px;background:#293b4c;border-radius:12px;margin:12px 0}
+.progress>div{height:100%;width:0;background:linear-gradient(90deg,#48b9b8,#8ad7a6);border-radius:12px}
+h2{font-size:17px;margin:0 0 5px}.tag{display:inline-block;border:1px solid #4e6d78;border-radius:22px;padding:3px 9px;font-size:11px;color:#bde9da}
+.cards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin:14px 0}
+.tile{min-width:0;background:#111c28;border:2px solid transparent;border-radius:12px;padding:6px;cursor:pointer}
+.tile img{width:100%;aspect-ratio:1;object-fit:contain;border-radius:8px;background:#293c51;display:block}
+.tile canvas{width:100%;aspect-ratio:1;display:block;border-radius:8px;background:#293c51}
+.tile strong{display:block;font-size:12px;line-height:1.25;min-height:31px;margin:5px 0;color:#d5dfe9}
+.tile small{color:#9cafbc}.tile.chosen{border-color:var(--sea);background:#163d3c}.tile.reference{opacity:.94}
+.hint{padding:10px 12px;border-radius:9px;background:#25394a;color:#cfdeed;margin:9px 0}
+.actions{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:13px}
+.actions button{font-weight:720;padding:13px 5px;font-size:14px}
+.approve{background:#285e51;border-color:#48997b;color:#d4ffed}.reject{background:#663b46;border-color:#a36374;color:#ffe6e9}.later{background:#3d4c61}
+.note{margin:10px 0}.nav{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:14px 0 0}
+.message{min-height:21px;margin:8px 0;color:#9cddc9}.message.error{color:var(--bad)}
+dialog{background:#101d2b;border:1px solid #567587;border-radius:13px;color:var(--txt);width:min(96vw,1080px);padding:10px}
+dialog::backdrop{background:#000e}dialog img{display:block;width:100%;max-height:80vh;object-fit:contain}.dtop{display:flex;justify-content:space-between;align-items:center}
+@media(max-width:760px){
+main{padding:9px 9px 140px}header{padding:12px}header h1{font-size:21px}
+section.panel{padding:9px}.cards{display:flex;overflow-x:auto;scroll-snap-type:x proximity;padding-bottom:10px;margin:10px 0}
+.tile{flex:0 0 min(36vw,170px);scroll-snap-align:start;padding:4px}.tile strong{font-size:11px;min-height:41px}
+.actions{position:fixed;bottom:0;left:0;right:0;padding:10px 10px calc(12px + env(safe-area-inset-bottom));background:#101e2dee;backdrop-filter:blur(10px);border-top:1px solid #465c70;z-index:10}
+.toolbar .info{margin:0;width:100%}
+}
+</style></head>
+<body>
+<header>
+ <div class="top"><div style="color:#86dfc3;font-size:12px;letter-spacing:.13em;font-weight:750">NEURALFILTERS · DATASET D5</div><span id="authStatus" class="status">Validação v1</span></div>
+ <h1>Validar correções antes do reprocessamento</h1>
+ <p>22 comparações: 18 rejeitadas e 4 controles aprovados. As variantes são experimentais. Nenhuma aprovação nesta página modifica os targets ou votos da curadoria principal.</p>
+ <p><a href="./">Voltar à curadoria principal</a></p>
+</header>
+<main>
+ <section id="login" class="panel auth">
+  <h2>Acessar imagens privadas</h2>
+  <p class="muted">Use o mesmo token GitHub usado na curadoria D5, com acesso exclusivo a <b>APS-D5-Curation-Data</b> e permissões Contents (Read) e Issues (Read and write).</p>
+  <label for="token">Token GitHub</label><input type="password" id="token" placeholder="github_pat_…" autocomplete="off" spellcheck="false">
+  <button id="connect">Abrir validação</button>
+  <p><a href="./">Voltar à tela de configuração do token</a></p>
+  <p id="loginError" class="message error" role="status"></p>
+ </section>
+ <section id="app" hidden>
+  <section class="panel">
+   <div class="toolbar"><label for="category">Categoria</label>
+    <select id="category"><option value="all">Todas (22)</option><option value="iris">Íris</option><option value="glasses">Óculos / delineado</option><option value="mouth">Boca / batom</option><option value="skin">Pele</option></select>
+    <label for="filter">Situação</label>
+    <select id="filter"><option value="pending">Não avaliadas</option><option value="all">Todas</option><option value="approve_variant">Variantes aprovadas</option><option value="reject">Sem solução</option><option value="later">Revisar depois</option><option value="pass_control">Controles sem regressão</option><option value="fail_control">Regressões em controles</option></select>
+    <span class="info"><span id="counter" class="tag"></span></span>
+    <button id="reload" type="button">Atualizar votos</button>
+   </div>
+   <div class="progress"><div id="bar"></div></div>
+   <div id="stats" class="muted"></div>
+  </section>
+  <section class="panel">
+   <div class="top"><h2 id="caseid">Carregando…</h2><span id="position" class="tag"></span></div>
+   <p id="caseinfo" class="muted"></p><p id="existingNote" class="muted"></p>
+   <div class="hint" id="hint">Escolha a melhor variante, confira a imagem ampliada e registre seu julgamento.</div>
+   <div class="cards" id="cards"></div>
+   <label for="note">Observação da avaliação (opcional, útil para os casos difíceis)</label>
+   <textarea id="note" rows="2" maxlength="500" placeholder="O que melhorou? O que ainda está errado?"></textarea>
+   <div class="actions">
+    <button id="reject" class="reject">Nenhuma serve</button>
+    <button id="later" class="later">Revisar depois</button>
+    <button id="approve" class="approve">Aprovar variante</button>
+   </div>
+   <div class="nav"><button id="prev">← Anterior</button><span id="navInfo" class="muted"></span><button id="next">Próxima →</button></div>
+   <div id="message" class="message" role="status"></div>
+  </section>
+  <p class="muted">Se aprovar uma variante, sua escolha ficará registrada no repositório privado como avaliação experimental. Os controles aprovados permanecem intocados; neles, a decisão registra apenas se houve regressão.</p>
+ </section>
+</main>
+<dialog id="zoom"><div class="dtop"><strong id="zoomLabel"></strong><button id="zoomClose">Fechar</button></div><img id="zoomImage" alt="Versão ampliada"></dialog>
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+const state={token:sessionStorage.getItem("d5token")||"",manifest:null,rows:[],visible:[],reviews:{},index:0,busy:false,selected:3,caseKey:"",objectURL:"",filter:"pending"};
+const REPO="Kosmosapien/APS-D5-Curation-Data";
+const ISSUE=21;
+function inform(msg,err=false){$("message").textContent=msg;$("message").className="message"+(err?" error":"")}
+async function api(path,method="GET",body=null){
+ const r=await fetch("https://api.github.com/repos/"+REPO+"/"+path,{method,
+  headers:{"Authorization":"Bearer "+state.token,"Accept":"application/vnd.github+json","X-GitHub-Api-Version":"2022-11-28",...(body?{"Content-Type":"application/json"}:{})},
+  body:body?JSON.stringify(body):undefined,cache:"no-store"});
+ if(!r.ok){let msg="";try{msg=(await r.json()).message}catch(_){}throw Error("GitHub "+r.status+": "+msg)}
+ return r.json();
+}
+async function privateJSON(path){
+ const v=await api("contents/"+path+"?ref=main");
+ if(!v.content)throw Error("Arquivo privado inacessível: "+path);
+ return JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(v.content.replace(/\s/g,"")),x=>x.charCodeAt(0))));
+}
+async function loadReviews(){
+ const rows=[];
+ for(let page=1;page<=10;page++){
+  const next=await api("issues/"+ISSUE+"/comments?per_page=100&page="+page);
+  rows.push(...next);
+  if(next.length<100)break;
+ }
+ const result={};
+ for(const x of rows){
+  if(x.user?.login?.toLowerCase()!=="kosmosapien"||typeof x.body!=="string"||!x.body.startsWith("D5VAL1 "))continue;
+  try{
+   const vote=JSON.parse(x.body.slice(7));
+   if(vote.pilot_id===state.manifest.pilot_id&&state.manifest.cases.some(c=>c.key===vote.key))result[vote.key]=vote;
+  }catch(e){}
+ }
+ state.reviews=result;
+}
+function listRows(){
+ const cat=$("category").value,filter=$("filter").value;
+ const list=state.rows.filter(x=>cat==="all"||x.category===cat);
+ state.visible=list.filter(x=>{
+  if(filter==="all")return true;
+  const decision=state.reviews[x.key]?.decision||"";
+  return filter==="pending"?!decision:decision===filter;
+ });
+ state.index=Math.max(0,Math.min(state.index,state.visible.length-1));
+ const completed=state.rows.filter(x=>state.reviews[x.key]).length;
+ const fail=state.rows.filter(x=>state.reviews[x.key]?.decision==="fail_control").length;
+ const approved=state.rows.filter(x=>state.reviews[x.key]?.decision==="approve_variant").length;
+ $("counter").textContent=completed+" / "+state.rows.length+" avaliadas";
+ $("stats").textContent=approved+" variantes aprovadas · "+fail+" regressões nos controles · "+(state.rows.length-completed)+" pendentes";
+ $("bar").style.width=100*completed/state.rows.length+"%";
+ render();
+}
+function clearImage(){
+ if(state.objectURL){URL.revokeObjectURL(state.objectURL);state.objectURL=""}
+ $("cards").replaceChildren();
+}
+function render(){
+ clearImage();
+ const c=state.visible[state.index];
+ $("position").textContent=c?(state.index+1)+" / "+state.visible.length:"0 / 0";
+ $("prev").disabled=!c||state.index===0||state.busy;
+ $("next").disabled=!c||state.index===state.visible.length-1||state.busy;
+ for(const id of ["approve","reject","later"])$(id).disabled=!c||state.busy;
+ if(!c){
+  $("caseid").textContent="Nenhum caso neste filtro";
+  $("caseinfo").textContent="Selecione outro filtro ou categoria.";
+  $("existingNote").textContent="";
+  return;
+ }
+ $("caseid").textContent=c.id+" · "+state.manifest.categories[c.category];
+ $("caseinfo").textContent=(c.kind==="approved_control"?"CONTROLE JÁ APROVADO":"REJEITADO")+
+  " · "+(c.baseline_reason||"Motivo não classificado")+" · hipótese: "+c.hypothesis;
+ $("existingNote").textContent=c.baseline_note?"Observação anterior: "+c.baseline_note:"";
+ const previous=state.reviews[c.key];
+ state.selected=previous?.selected_index>=3?previous.selected_index:3;
+ $("note").value=previous?.note||"";
+ $("approve").textContent=c.kind==="approved_control"?"Sem regressão":"Aprovar variante";
+ $("reject").textContent=c.kind==="approved_control"?"Houve regressão":"Nenhuma serve";
+ $("hint").textContent=c.kind==="approved_control"?
+  "Controle aprovado: selecione a variante (4ª ou 5ª imagem) e verifique se ela piorou o resultado. Nenhuma mudança será aplicada ao target original.":
+  "Rejeitada: selecione a 4ª ou 5ª imagem e avalie se a nova versão corrige o problema sem criar outro. A 3ª é o target anteriormente rejeitado.";
+ state.caseKey=c.key;
+ loadImages(c);
+}
+async function loadImages(c){
+ inform("Carregando imagens privadas…");
+ try{
+  const result=await api("contents/"+c.preview_path+"?ref=main");
+  if(!result.content)throw Error("Prévia inacessível");
+  const bytes=Uint8Array.from(atob(result.content.replace(/\s/g,"")),x=>x.charCodeAt(0));
+  const url=URL.createObjectURL(new Blob([bytes],{type:"image/webp"}));
+  const img=new Image();
+  await new Promise((ok,fail)=>{img.onload=ok;img.onerror=fail;img.src=url});
+  if(state.caseKey!==c.key){URL.revokeObjectURL(url);return}
+  if(state.objectURL)URL.revokeObjectURL(state.objectURL);
+  state.objectURL=url;
+  const n=c.labels.length;
+  const tileWidth=img.naturalWidth/n;
+  $("cards").replaceChildren();
+  c.labels.forEach((label,i)=>{
+   const tile=document.createElement("div");
+   tile.className="tile"+(i===state.selected?" chosen":"")+(i<3?" reference":"");
+   const title=document.createElement("strong");title.textContent=(i+1)+". "+label;
+   const canvas=document.createElement("canvas");canvas.width=240;canvas.height=240;
+   canvas.getContext("2d").drawImage(img,i*tileWidth,0,tileWidth,img.naturalHeight,0,0,240,240);
+   const desc=document.createElement("small");desc.textContent=i===2?"Target oficial (não alterar)":(i>2?"Candidata experimental":"Referência");
+   tile.append(title,canvas,desc);
+   tile.onclick=()=>{
+    if(i>=3){state.selected=i;[...$("cards").children].forEach((x,k)=>x.classList.toggle("chosen",k===i))}
+    $("zoomLabel").textContent=c.id+" · "+label;
+    $("zoomImage").src=canvas.toDataURL("image/png");
+    $("zoom").showModal();
+   };
+   $("cards").append(tile);
+  });
+  inform("Escolha uma candidata e registre a avaliação.");
+ }catch(e){if(state.caseKey===c.key)inform("Falha ao carregar: "+e.message,true)}
+}
+async function saveDecision(kind){
+ const c=state.visible[state.index];if(!c||state.busy)return;
+ const isControl=c.kind==="approved_control";
+ const decision=isControl?(kind==="approve"?"pass_control":kind==="reject"?"fail_control":"later"):
+  (kind==="approve"?"approve_variant":kind==="reject"?"reject":"later");
+ if((decision==="approve_variant"||decision==="pass_control")&&![3,4].includes(state.selected)){
+  inform("Selecione a quarta ou quinta variante primeiro.",true);return;
+ }
+ state.busy=true;for(const id of ["approve","reject","later"])$(id).disabled=true;
+ inform("Registrando a decisão privada…");
+ const previousIndex=state.index;
+ const event={schema:"D5VAL1",pilot_id:state.manifest.pilot_id,key:c.key,id:c.id,
+  category:c.category,kind:c.kind,decision,selected_index:state.selected,
+  selected_label:c.labels[state.selected],note:$("note").value.trim(),
+  previous_official_vote:c.baseline_vote,source_preview:c.preview_path,
+  created_at:new Date().toISOString(),event_id:crypto.randomUUID?crypto.randomUUID():String(Date.now())};
+ try{
+  await api("issues/"+ISSUE+"/comments","POST",{body:"D5VAL1 "+JSON.stringify(event)});
+  state.reviews[c.key]=event;
+  inform("Avaliação salva. O voto oficial do D5 não foi modificado.");
+  if($("filter").value==="pending")state.index=previousIndex;
+  else state.index=Math.min(previousIndex+1,state.visible.length-1);
+  listRows();
+ }catch(e){inform("Não foi possível salvar: "+e.message,true)}
+ finally{state.busy=false;for(const id of ["approve","reject","later"])$(id).disabled=false}
+}
+function navigate(d){
+ if(state.busy||!state.visible.length)return;
+ state.index=Math.max(0,Math.min(state.visible.length-1,state.index+d));render();
+}
+async function connect(){
+ $("connect").disabled=true;$("loginError").textContent="Autenticando no repositório privado…";
+ try{
+  state.token=$("token").value.trim()||state.token;
+  if(!state.token)throw Error("Informe seu token GitHub.");
+  state.manifest=await privateJSON("variants/mini_v1.json");
+  if(state.manifest.schema!=="D5VAL1"||state.manifest.cases.length!==22)throw Error("Manifesto de validação inválido.");
+  state.rows=state.manifest.cases;
+  await loadReviews();
+  sessionStorage.setItem("d5token",state.token);
+  $("login").hidden=true;$("app").hidden=false;
+  $("authStatus").textContent="Coleção privada conectada";
+  listRows();
+ }catch(e){$("loginError").textContent=e.message||String(e)}
+ finally{$("connect").disabled=false}
+}
+$("connect").onclick=connect;
+$("token").onkeydown=e=>{if(e.key==="Enter")connect()};
+$("category").onchange=()=>{state.index=0;listRows()};
+$("filter").onchange=()=>{state.index=0;listRows()};
+$("reload").onclick=async()=>{try{await loadReviews();listRows();inform("Avaliações sincronizadas.")}catch(e){inform(e.message,true)}};
+$("prev").onclick=()=>navigate(-1);$("next").onclick=()=>navigate(1);
+$("approve").onclick=()=>saveDecision("approve");
+$("reject").onclick=()=>saveDecision("reject");
+$("later").onclick=()=>saveDecision("later");
+$("zoomClose").onclick=()=>$("zoom").close();
+if(state.token){$("token").value=state.token;connect()}
+</script></body></html>
