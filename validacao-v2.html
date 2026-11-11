@@ -78,6 +78,8 @@ section.panel{padding:9px}.cards{display:flex;overflow-x:auto;scroll-snap-type:x
    <p id="caseinfo" class="muted"></p><p id="existingNote" class="muted"></p>
    <div class="hint" id="hint">Escolha a melhor variante, confira a imagem ampliada e registre seu julgamento.</div>
    <div class="cards" id="cards"></div>
+   <button id="eyeToggle" type="button" style="width:100%;background:#244f54;color:#d5fff0;border-color:#469282">Examinar pálpebras e íris em detalhe</button>
+   <div id="eyeCards" class="cards" hidden></div>
    <label for="note">Observação da avaliação (opcional, útil para os casos difíceis)</label>
    <textarea id="note" rows="2" maxlength="500" placeholder="O que melhorou? O que ainda está errado?"></textarea>
    <div class="actions">
@@ -146,6 +148,9 @@ function listRows(){
  render();
 }
 function clearImage(){
+ if(state.eyeObjectURL){URL.revokeObjectURL(state.eyeObjectURL);state.eyeObjectURL=""}
+ $("eyeCards").replaceChildren();$("eyeCards").hidden=true;
+ $("eyeToggle").textContent="Examinar pálpebras e íris em detalhe";
  if(state.objectURL){URL.revokeObjectURL(state.objectURL);state.objectURL=""}
  $("cards").replaceChildren();
 }
@@ -266,6 +271,52 @@ $("prev").onclick=()=>navigate(-1);$("next").onclick=()=>navigate(1);
 $("approve").onclick=()=>saveDecision("approve");
 $("reject").onclick=()=>saveDecision("reject");
 $("later").onclick=()=>saveDecision("later");
+
+// D5_EYES_ZOOM_V2 — private, source-aligned 384x240 eye close-ups
+$("eyeToggle").onclick=async()=>{
+ const c=state.visible[state.index];
+ if(!c||state.busy)return;
+ if(!$("eyeCards").hidden){
+  $("eyeCards").hidden=true;
+  $("eyeToggle").textContent="Examinar pálpebras e íris em detalhe";
+  return;
+ }
+ const sid=c.id,key=c.key;
+ $("eyeToggle").disabled=true;
+ $("eyeToggle").textContent="Carregando detalhes privados...";
+ try{
+  const blob=await api("contents/full_pipeline_v2/eye_crops/"+sid+".webp?ref=main");
+  if(!blob.content)throw Error("Corte ocular indisponível");
+  const bytes=Uint8Array.from(atob(blob.content.replace(/\s/g,"")),v=>v.charCodeAt(0));
+  const url=URL.createObjectURL(new Blob([bytes],{type:"image/webp"}));
+  const im=new Image();
+  await new Promise((ok,fail)=>{im.onload=ok;im.onerror=fail;im.src=url});
+  if(state.caseKey!==key){URL.revokeObjectURL(url);return}
+  if(state.eyeObjectURL)URL.revokeObjectURL(state.eyeObjectURL);
+  state.eyeObjectURL=url;
+  const target=$("eyeCards");target.replaceChildren();
+  const tileWidth=im.naturalWidth/c.labels.length;
+  c.labels.forEach((label,i)=>{
+   const div=document.createElement("div");div.className="tile";
+   const title=document.createElement("strong");title.textContent=(i+1)+". "+label;
+   const canvas=document.createElement("canvas");canvas.width=384;canvas.height=240;
+   canvas.style.aspectRatio="8/5";
+   canvas.getContext("2d").drawImage(im,i*tileWidth,0,tileWidth,im.naturalHeight,0,0,384,240);
+   div.append(title,canvas);
+   div.onclick=()=>{
+    if(i>=3){state.selected=i;[...$("cards").children].forEach((x,k)=>x.classList.toggle("chosen",k===i))}
+    $("zoomLabel").textContent=sid+" · "+label+" · olhos";
+    $("zoomImage").src=canvas.toDataURL("image/png");
+    $("zoom").showModal();
+   };
+   target.append(div);
+  });
+  target.hidden=false;
+  $("eyeToggle").textContent="Ocultar detalhe dos olhos";
+ }catch(e){inform("Erro no detalhe ocular: "+e.message,true);$("eyeToggle").textContent="Tentar ampliar olhos novamente";}
+ finally{$("eyeToggle").disabled=false}
+};
+
 $("zoomClose").onclick=()=>$("zoom").close();
 if(state.token){$("token").value=state.token;connect()}
 </script></body></html>
